@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\firebase-iot-demo\\.vscode"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\firebase-iot-demo\\.pio"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\firebase-iot-demo\\include"
+		}
+	],
+	"settings": {}
+}
