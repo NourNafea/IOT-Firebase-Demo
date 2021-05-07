@@ -17,18 +17,23 @@ void setup()
   pinMode(LED, OUTPUT);
 }
 
-
 void loop()
 {
 
-  digitalWrite(LED, HIGH);
-  Firebase.setString("Led status", "ON");
-  delay(1000);
-  
-  digitalWrite(LED, LOW);
-  Firebase.setString("Led status", "OFF");
-  delay(1000);
+  String path = "/LED/";
+  FirebaseObject object = Firebase.get(path);
+  String Status = object.getString("status");
+  if (Status == "ON")
+  {
+    digitalWrite(LED, HIGH);
+    Firebase.setString("Led Status","ON");
+  }
+  else if (Status == "OFF"){
+    digitalWrite(LED, LOW);
+    Firebase.setString("Led Status","OFF");
+  }
 
+  //handling error
   if (Firebase.failed())
   {
     Serial.print("setting /message failed:");
