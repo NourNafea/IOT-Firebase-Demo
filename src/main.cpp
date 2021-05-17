@@ -7,6 +7,10 @@
 
 #define LED D3
 
+const int flame = 5; //--> The pin used for the FLAME sensor is Pin D1 = GPIO5
+bool flame1 = 0; //state flame {False}
+int isFlame = LOW; // HIGH when Flame Exposed
+
 void connectToWiFi(char const *ssid, char const *password);
 
 void setup()
@@ -14,24 +18,32 @@ void setup()
   Serial.begin(115200);
   connectToWiFi(SSID, PASSWORD);
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  pinMode(LED, OUTPUT);
+  pinMode(flame, INPUT); 
 }
 
 void loop()
 {
+  isFlame = digitalRead(flame);
 
-  String path = "/LED/";
-  FirebaseObject object = Firebase.get(path);
-  String Status = object.getString("status");
-  if (Status == "ON")
-  {
-    digitalWrite(LED, HIGH);
-    Firebase.setString("Led Status","ON");
+  if (isFlame == HIGH) {
+    flame1 = 1;
+      
+    Serial.println("FLAME, FLAME, FLAME");
+      
+    Firebase.setString("FLAME", "FLAME DETECTED");
+    Firebase.set("FLAME STATE", flame1); //--> Command or code for sending data (int data type) to Firebase Realtime Database.
+   
+  } else {
+    flame1 = 0;
+    
+    Serial.println("no flame");
+
+    Firebase.setString("FLAME", "NOT DETECTED");
+
+    Firebase.set("FLAME STATE", flame1);
   }
-  else if (Status == "OFF"){
-    digitalWrite(LED, LOW);
-    Firebase.setString("Led Status","OFF");
-  }
+  Serial.println(flame1);
+  
 
   //handling error
   if (Firebase.failed())
@@ -64,3 +76,6 @@ void connectToWiFi(char const *ssid, char const *password)
   Serial.println(WiFi.localIP());
   Serial.println("");
 }
+
+  
+
